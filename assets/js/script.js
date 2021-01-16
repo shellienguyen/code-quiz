@@ -1,3 +1,82 @@
+let theQuiz = function( questionsArr ) {
+   this.score = 0;
+   this.questions = questionsArr;
+   console.log( "this.questions:");
+   console.log( this.questions );
+   this.questionIndex = 0;
+}
+
+theQuiz.prototype.getQuestionIndex = function() {
+   return this.questions[this.questionIndex];
+}
+
+theQuiz.prototype.guess = function( userAnswer ) {
+   if(this.getQuestionIndex().isCorrectAnswer( userAnswer )) {
+       this.score++;
+   }
+
+   this.questionIndex++;
+}
+
+theQuiz.prototype.isEnded = function() {
+   return this.questionIndex === this.questions.length;
+}
+
+
+let eachQuestion = function( question, answerChoices, correctAnswer ) {
+   this.questionText = question;
+   this.answerChoices = answerChoices;
+   this.correctAnswer = correctAnswer;
+}
+
+eachQuestion.prototype.isCorrectAnswer = function( userAnswer ) {
+   return this.correctAnswer === userAnswer;
+}
+
+let displayQuiz = function() {
+   if( quiz.isEnded() ) {
+       showScores();
+   }
+   else {
+       // show question
+       let element = document.getElementById( "question" );
+       element.innerHTML = quiz.getQuestionIndex().questionText;
+
+       // show options
+       let choices = quiz.getQuestionIndex().answerChoices;
+       for( let i = 0; i < choices.length; i++ ) {
+           let element = document.getElementById( "choice" + i );
+           element.innerHTML = choices[ i ];
+           guess( "btn" + i, choices[ i ]);
+       }
+
+       showProgress();
+   }
+};
+
+let guess = function( id, guess ) {
+   let button = document.getElementById( id );
+   button.onclick = function() {
+       quiz.guess( guess );
+       displayQuiz();
+   }
+};
+
+let showProgress = function() {
+   let currentQuestionNumber = quiz.questionIndex++;
+   let element = document.getElementById( "progress" );
+   element.innerHTML = "Question " + currentQuestionNumber + " of " + quiz.questions.length;
+};
+
+let showScores = function() {
+   let gameOverHTML = "<h1>Result</h1>";
+   gameOverHTML += "<h2 id='score'> Your scores: " + quiz.score + "</h2>";
+   let element = document.getElementById("quiz");
+   element.innerHTML = gameOverHTML;
+};
+
+// create questions here
+
 let quizQuestions = [
    new eachQuestion( "Commonly used data types DO NOT include:",
                      [ "strings", "booleans", "alerts", "numbers" ],
@@ -16,41 +95,8 @@ let quizQuestions = [
                      "console log" )
 ];
 
-let eachQuestion = function( theQuestion, answerChoices, answer ) {
-   this.theQuestion = theQuestion;
-   this.answerChoices - answerChoices;
-   this.answer = answer;
-};
+// create quiz
+let quiz = new theQuiz( quizQuestions );
 
-let quiz = function( quizQuestions ) {
-   this.score = 0;
-   this.questions = quizQuestions;
-   this.questionIndex = 0;
-};
-
-// Create the quiz
-let theQuiz = new quiz( quizQuestions );
-
-let diplayQuiz = function() {
-   if ( theQuiz.isEnded() ) {
-      showScores();
-   }
-   else {
-      // Display the question
-      let element = document.getElementById( "question" );
-      element.innerHTML = theQuiz.getQuestionIndex().text;
-
-      // Show answer choices
-      let choices = theQuiz.getQuestionIndex().choices;
-      for( let i = 0; i < choices.length; i++ ) {
-         let ele = document.getElementById( "choice" + 1 );
-         ele.innerHTML = choices[i];
-         guess( "btn", + i, choices[ i ] );
-      };
-
-      showProgress();
-   };
-};
-
-// Display the quiz
-diplayQuiz();
+// display quiz
+displayQuiz();
