@@ -10,16 +10,17 @@
 
 <body>
    <main>
-      <div class = "grid">
+      <div class = "grid-wrapper">
          <div id = "quiz">
             <h1>JavaScript Coding Assessment</h1>
 
-            <div class = "wrapper">
+            <div class = "wrapper" id = "wrapper">
                <div class = "container">
                   <!-- To display quiz progress, Question x of y questions -->
                   <div id = "progress"></div>
 
-                  <div id = "timer"></div>
+                  <!-- To display the current remaining time -->
+                  <div id = "time-left"></div>
                </div>
             </div>
 
@@ -27,16 +28,16 @@
             <p id = "quiz-question"></p>
 
             <div class = "answer-buttons">
-               <button id = "btn0">
+               <button id = "button0">
                   <span id = "choice0"></span>
                </button>
-               <button id = "btn1">
+               <button id = "button1">
                   <span id = "choice1"></span>
                </button>
-               <button id = "btn2">
+               <button id = "button2">
                   <span id = "choice2"></span>
                </button>
-               <button id = "btn3">
+               <button id = "button3">
                   <span id = "choice3"></span>
                </button>
             </div>
