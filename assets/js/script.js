@@ -1,3 +1,10 @@
+let timeRemaining = 300;
+
+let displayTime = function() {
+   let timeElement = document.getElementById( "timer" );
+   timeElement.innerHTML = "Time Remaining: " + timeRemaining + " seconds.";
+};
+
 // Create function constructor to use for inheritance
 let TheQuiz = function( questionsObj ) {
    this.score = 0;
@@ -10,8 +17,16 @@ TheQuiz.prototype.getQuestionIndex = function() {
 };
 
 TheQuiz.prototype.guess = function( userAnswer ) {
+   let isCorrect = document.getElementById( "answer-status" );
+
    if ( this.getQuestionIndex().isCorrectAnswer( userAnswer )) {
-       this.score++;
+      this.score++;
+      isCorrect.innerHTML = "Correct";
+   }
+   else {
+      isCorrect.innerHTML = "Incorrect";
+      timeRemaining = timeRemaining - 10;
+      displayTime();
    };
 
    this.questionIndex++;
@@ -35,22 +50,22 @@ eachQuestion.prototype.isCorrectAnswer = function( userAnswer ) {
 
 let displayQuiz = function() {
    if( newQuiz.isEnded() ) {
-       showScores();
+      showScores();
    }
    else {
-       // show question
-       let element = document.getElementById( "quiz-question" );
-       element.innerHTML = newQuiz.getQuestionIndex().questionText;
+      // Display the quiz question
+      let element = document.getElementById( "quiz-question" );
+      element.innerHTML = newQuiz.getQuestionIndex().questionText;
 
-       // show options
-       let choices = newQuiz.getQuestionIndex().answerChoices;
-       for( let i = 0; i < choices.length; i++ ) {
-           let element = document.getElementById( "choice" + i );
-           element.innerHTML = choices[ i ];
-           guess( "btn" + i, choices[ i ]);
-       }
+       // Display answer choices
+      let choices = newQuiz.getQuestionIndex().answerChoices;
+      for( let i = 0; i < choices.length; i++ ) {
+         let element = document.getElementById( "choice" + i );
+         element.innerHTML = choices[ i ];
+         guess( "btn" + i, choices[ i ]);
+      }
 
-       showProgress();
+      showProgress();
    }
 };
 
@@ -63,7 +78,7 @@ let guess = function( id, guess ) {
 };
 
 let showProgress = function() {
-   let currentQuestionNumber = newQuiz.questionIndex;
+   let currentQuestionNumber = newQuiz.questionIndex + 1;
    let element = document.getElementById( "progress" );
    element.innerHTML = "Question " + currentQuestionNumber + " of " + newQuiz.questions.length;
 };
@@ -91,11 +106,29 @@ let quizQuestions = [
                      "quotes" ),
    new eachQuestion( "A very useful tool used during evelopment and debugging for printing content to the debugger is",
                      [ "JavaScript", "terminal/bash", "for loops", "console log" ],
-                     "console log" )
+                     "console log" ),
+   new eachQuestion( "JavaScript is:",
+                     [ "client-side scripting language", "server-side scripting language", "neither", "both" ],
+                     "both" ),
+   new eachQuestion( "Which is the symbol used for comments in JavaScript",
+                     [ "//", "!----!", "**", "none of the above" ],
+                     "//" ),
+   new eachQuestion( "Which of the following is a strict equality?",
+                     [ "==", "=", "===", "all of the above" ],
+                     "===" ),
+   new eachQuestion( "What can you use to convert the string of any base to an integer in JavaScript?",
+                     [ "convertToInt();", "parseInt();", "toInt();", "allToInt();" ],
+                     "parseInt();" ),
+   new eachQuestion( "What does an undefined value in JavaScript mean?",
+                     [ "variable does not exist", "variable has no value", "property does not exist", "all of the above" ],
+                     "all of the above" )
 ];
 
 // Create new object of TheQuiz constructor
 let newQuiz = new TheQuiz( quizQuestions );
+
+// Display timer
+displayTime();
 
 // display quiz
 displayQuiz();

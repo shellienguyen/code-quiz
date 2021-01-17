@@ -12,10 +12,16 @@
    <main>
       <div class = "grid">
          <div id = "quiz">
-            <h1>Code Quiz</h1>
+            <h1>JavaScript Coding Assessment</h1>
 
-            <!-- To display quiz progress, Question x of y questions -->
-            <div id = "progress">blah</div>
+            <div class = "wrapper">
+               <div class = "container">
+                  <!-- To display quiz progress, Question x of y questions -->
+                  <div id = "progress"></div>
+
+                  <div id = "timer"></div>
+               </div>
+            </div>
 
             <hr style = "margin-bottom: 20px">
             <p id = "quiz-question"></p>
@@ -34,6 +40,13 @@
                   <span id = "choice3"></span>
                </button>
             </div>
+
+            <hr style="margin-bottom: 50px">
+
+            <!-- Let the user know if the answer is correct or incorrect -->
+            <footer>
+               <p id="answer-status"></p>
+            </footer>
 
             <hr style = "margin-top: 50px">
          </div> 
