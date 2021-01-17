@@ -1,4 +1,5 @@
 let timeRemaining = 300;
+let startQuizBtn = document.createElement( "button" );
 
 // Create function constructor to use for inheritance
 let TheQuiz = function( questionsObj ) {
@@ -57,6 +58,13 @@ let displayTime = function() {
 };
 
 let displayQuiz = function() {
+   // Hide the "Start Quiz" button from the welcome page
+   startQuizBtn.style.visibility = "hidden";
+
+   // Change the page's header message as we are no longer in the welcome page
+   let headerMsg = "<h1 id = 'header-msg'>JavaScript Coding Assessment</h1>";
+   let element = document.getElementById( "quiz" );
+   element.innerHTML = headerMsg;
    
    // Display time remaining
    displayTime();
@@ -72,19 +80,19 @@ let displayQuiz = function() {
        // Display answer choices
       let choices = newQuiz.getQuestionIndex().answerChoices;
       for( let i = 0; i < choices.length; i++ ) {
-         let element = document.getElementById( "choice" + i );
+         let element = document.getElementById( "answer-choice" + i );
          element.innerHTML = choices[ i ];
-         userChoice( "btn" + i, choices[ i ] );
+         userChoice( "button" + i, choices[ i ] );
       }
 
       displayProgress();
    }
 };
 
-let userChoice = function( id, choice ) {
+let userChoice = function( id, answerChoice ) {
    let button = document.getElementById( id );
    button.onclick = function() {
-      newQuiz.userChoice( choice );
+      newQuiz.userChoice( answerChoice );
       displayQuiz();
    }
 };
@@ -155,7 +163,7 @@ let displayWelcome = function() {
    element.innerHTML = welcomeMsg;
 
    // Dynamically create the "Start Quiz" button
-   let startQuizBtn = document.createElement( "button" );
+   //let startQuizBtn = document.createElement( "button" );
    startQuizBtn.innerHTML = "Start Quiz";
    startQuizBtn.id = "start-quiz-btn";
    //let btnElement = document.getElementById( "wrapper" );

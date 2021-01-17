@@ -40,7 +40,7 @@ body {
    grid-template-rows: 1fr;
 }
 
-#welcome {
+#welcome #header-msg {
    color: var( --tertiary-color );
    text-align: center;
    font-size: 235x;
