@@ -1,5 +1,8 @@
 let timeRemaining = 300;
-let startQuizBtn = document.getElementById( "start-quiz-button" );
+let startQuizBtn = document.createElement( "button" );
+let timeElement = document.querySelector( "#time-left" );
+let quizQuestion = document.getElementById( "quiz-question" );
+let element = document.getElementById( "quiz" );
 
 // Create function constructor to use for inheritance
 let TheQuiz = function( questionsObj ) {
@@ -13,7 +16,7 @@ TheQuiz.prototype.getQuestionIndex = function() {
 };
 
 // When the user chooses an answer
-TheQuiz.prototype.userChoice = function( userAnswer ) {
+TheQuiz.prototype.useGuess = function( userAnswer ) {
    let isCorrect = document.getElementById( "answer-status" );
 
    // If the user answers the question correctly, display the "Correct" message
@@ -50,48 +53,75 @@ eachQuestion.prototype.isCorrectAnswer = function( userAnswer ) {
 
 // Display the current remaining time
 let displayTime = function() {
-   let timeElement = document.getElementById( "time-left" );
-   console.log( "displayTime function timeElement: " );
-   console.log( timeElement );
-   timeElement.innerHTML = "Time Remaining: " + timeRemaining + " seconds.";
+   /* //let timeElement = document.getElementById( "time-left" );
+   let timeElement = document.querySelector( "#time-left" );
+   updateHTML( timeElement, "blah" );
+   console.log( "displayTime function timeElement line 56: " );
+   console.log( timeElement.value );
+   timeElement.innerHTML = "Time Remaining: " + timeRemaining + " seconds."; */
+
+   
+   /* //* / Dynamically create the "Start Quiz" button
+   //let startQuizBtn = document.createElement( "button" );
+   startQuizBtn.innerHTML = "Start Quiz";
+   startQuizBtn.id = "start-quiz-btn";
+   //let btnElement = document.getElementById( "wrapper" );
+   element.appendChild( startQuizBtn ); */
+   
+   let timeElement = document.querySelector("#time-left");
+   if (timeELement === null)
+   {
+
+   } else
+   {
+      let pTagTime = document.createElement('P');
+   
+      pTagTime.textContent = "Time Remaining: " + timeRemaining + " seconds.";
+      timeElement.appendChild(pTagTime);
+   }
+
 };
 
-let displayQuiz = function() {
+ function displayQuiz() {
    // Hide the "Start Quiz" button from the welcome page
+   console.log( "inside displayQuiz");
    startQuizBtn.style.visibility = "hidden";
 
    // Change the page's header message as we are no longer in the welcome page
    let headerMsg = "<h1 id = 'header-msg'>JavaScript Coding Assessment</h1>";
-   let element = document.getElementById( "quiz" );
+   console.log( "headerMsg is " + headerMsg );
+   
    element.innerHTML = headerMsg;
    
    // Display time remaining
-   //displayTime();
+   //window.onload = displayTime;
+   displayTime();
 
    if( newQuiz.isEnded() ) {
       displayScores();
    }
    else {
       // Display the quiz question
-      let element = document.getElementById( "quiz-question" );
-      element.innerHTML = newQuiz.getQuestionIndex().questionText;
+      
+      quizQuestion.innerHTML = newQuiz.getQuestionIndex().questionText;
 
        // Display answer choices
       let choices = newQuiz.getQuestionIndex().answerChoices;
       for( let i = 0; i < choices.length; i++ ) {
-         let element = document.getElementById( "answer-choice" + i );
-         element.innerHTML = choices[ i ];
+         let newQuizQuestion = document.getElementById( "answer-choice" + i );
+         newQuizQuestion.innerHTML = choices[ i ];
          userChoice( "button" + i, choices[ i ] );
-      }
+      }  
 
       displayProgress();
    }
 };
 
 let userChoice = function( id, answerChoice ) {
+   console.log(id, answerChoice)
    let button = document.getElementById( id );
    button.onclick = function() {
-      newQuiz.userChoice( answerChoice );
+      newQuiz.userGuess( answerChoice );
       displayQuiz();
    }
 };
@@ -109,7 +139,7 @@ let displayScores = function() {
    gameOverHTML += "<br><h2 id = 'correct-answer'>You answered " + newQuiz.correctAnswer + " out of " +
                      newQuiz.questions.length + " questions correctly.</h2><br>" +
                      "<h2 id = 'correct-answer'>Your score is " + timeRemaining + "</h2>";
-   let element = document.getElementById( "quiz" );
+   
    element.innerHTML = gameOverHTML;
 };
 
@@ -155,29 +185,46 @@ let displayWelcome = function() {
    let welcomeMsg = "<h1 id = 'welcome'>Welcome to the<br>Coding Assessment</h1>";
    welcomeMsg += "<br><h2 id = 'welcomeH2'>Try to answer the following Javascript code-related" +
                      " questions within the time limit.  Keep in mind that incorrect answers will" +
-                     " penalize your score/time by ten seconds.</h2><br>" + startQuizBtn.outerHTML;
-   let element = document.getElementById( "quiz" );
-   element.innerHTML = welcomeMsg;
+                     " penalize your score/time by ten seconds.</h2><br>";
+   let quizContainer = document.getElementById( "quiz" );
+   console.log( "displayWelcome function element: ");
+   console.log( quizContainer );
+   quizContainer.innerHTML = welcomeMsg;
 
    // Dynamically create the "Start Quiz" button
    //let startQuizBtn = document.createElement( "button" );
-   /* startQuizBtn.innerHTML = "Start Quiz";
+   startQuizBtn.innerHTML = "Start Quiz";
    startQuizBtn.id = "start-quiz-btn";
    //let btnElement = document.getElementById( "wrapper" );
-   element.appendChild( startQuizBtn ); */
+   quizContainer.appendChild( startQuizBtn );
 
    // Start the quiz once the user has clicked on the "Start Quiz" button
    /* startQuizBtn.onclick = function() {
       displayQuiz();
    }; */
-   //startQuizBtn.addEventListener( "click", displayQuiz );
-   document.getElementById( "start-quiz-button" ).addEventListener( "click", displayQuiz );
+   // startQuizBtn.addEventListener( "click", displayQuiz );
 };
 
-
+// Check to see if the element retrieved is null
+// let updateHTML = function( elmId, value ) {
+//    var element = document.getElementById( elmId );
+//    if( typeof elem !== 'undefined' && elem !== null ) {
+//      elem.innerHTML = value;
+//    };
+//  };
 
 // Display welcome page
 displayWelcome();
 
+//window.onload = displayTime;
+window.onload = function()
+{
+      document.addEventListener('click',function (e) {
+         if(e.target && e.target.id == 'start-quiz-btn')
+         {
+            displayQuiz()
+         }
+      })
+}
 // display quiz
 //displayQuiz();
