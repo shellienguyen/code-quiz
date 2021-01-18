@@ -58,12 +58,17 @@ let displayTime = function() {
 
 let displayQuiz = function() {
    // Hide the "Start Quiz" button from the welcome page
+   console.log ("displayQuiz fnc");
    startQuizBtn.style.visibility = "hidden";
 
    // Change the page's header message as we are no longer in the welcome page
-   let headerMsg = "<h1 id = 'header-msg'>JavaScript Coding Assessment</h1>";
-   let element = document.getElementById( "quiz" );
-   element.innerHTML = headerMsg;
+   let headerMsg = "JavaScript Coding Assessment";
+   let element = document.getElementById( "header" );
+   element.setAttribute('id', 'header-msg');
+   element.textContent = headerMsg;
+
+   document.querySelector('#welcome-msg').setAttribute('style', 'display: none;');
+   document.querySelector('#quiz').setAttribute('style', 'display: block;');
    
    // Display time remaining
    //displayTime();
@@ -156,7 +161,8 @@ let displayWelcome = function() {
    welcomeMsg += "<br><h2 id = 'welcomeH2'>Try to answer the following Javascript code-related" +
                      " questions within the time limit.  Keep in mind that incorrect answers will" +
                      " penalize your score/time by ten seconds.</h2><br>" + startQuizBtn.outerHTML;
-   let element = document.getElementById( "quiz" );
+   let element = document.getElementById( "welcome-msg" );
+   console.log( "About to clear quiz element: " );
    element.innerHTML = welcomeMsg;
 
    // Dynamically create the "Start Quiz" button
