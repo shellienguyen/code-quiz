@@ -1,9 +1,13 @@
 let timeRemaining = 300;
-let startQuizBtn = document.getElementById( "start-quiz-button" );
+
+let displayTime = function() {
+   let timeElement = document.getElementById( "timer" );
+   timeElement.innerHTML = "Time Remaining: " + timeRemaining + " seconds.";
+};
 
 // Create function constructor to use for inheritance
 let TheQuiz = function( questionsObj ) {
-   this.correctAnswer = 0;
+   this.score = 0;
    this.questions = questionsObj;
    this.questionIndex = 0;
 };
@@ -12,22 +16,17 @@ TheQuiz.prototype.getQuestionIndex = function() {
    return this.questions[ this.questionIndex ];
 };
 
-// When the user chooses an answer
-TheQuiz.prototype.userChoice = function( userAnswer ) {
+TheQuiz.prototype.guess = function( userAnswer ) {
    let isCorrect = document.getElementById( "answer-status" );
+   let questionNumber = parseInt( this.questionIndex ) + 1;
 
-   // If the user answers the question correctly, display the "Correct" message
-   //   and increase the correct answer count
    if ( this.getQuestionIndex().isCorrectAnswer( userAnswer )) {
-      this.correctAnswer++;
-      isCorrect.innerHTML = "Correct";
+      this.score++;
+      isCorrect.innerHTML = "Question " + questionNumber + " was Correct ";
    }
-   // If the user answers the question incorrectly, display the "Incorrect" message,
-   //    decrease the time by 10, and display the new time
    else {
-      isCorrect.innerHTML = "Incorrect";
+      isCorrect.innerHTML = "Question " + questionNumber + " was Incorrect ";
       timeRemaining = timeRemaining - 10;
-      console.log ( "timeRemaining: " + timeRemaining );
       displayTime();
    };
 
@@ -45,36 +44,14 @@ let eachQuestion = function( question, answerChoices, correctAnswer ) {
 };
 
 eachQuestion.prototype.isCorrectAnswer = function( userAnswer ) {
+   console.log ( "userAnswer: " );
+   console.log( userAnswer );
    return this.correctAnswer === userAnswer;
 };
 
-// Display the current remaining time
-let displayTime = function() {
-   let timeElement = document.getElementById( "time-left" );
-   console.log( "displayTime function timeElement: " );
-   console.log( timeElement );
-   timeElement.innerHTML = "Time Remaining: " + timeRemaining + " seconds.";
-};
-
 let displayQuiz = function() {
-   // Hide the "Start Quiz" button from the welcome page
-   console.log ("displayQuiz fnc");
-   startQuizBtn.style.visibility = "hidden";
-
-   // Change the page's header message as we are no longer in the welcome page
-   let headerMsg = "JavaScript Coding Assessment";
-   let element = document.getElementById( "header" );
-   element.setAttribute('id', 'header-msg');
-   element.textContent = headerMsg;
-
-   document.querySelector('#welcome-msg').setAttribute('style', 'display: none;');
-   document.querySelector('#quiz').setAttribute('style', 'display: block;');
-   
-   // Display time remaining
-   //displayTime();
-
    if( newQuiz.isEnded() ) {
-      displayScores();
+      showScores();
    }
    else {
       // Display the quiz question
@@ -84,36 +61,33 @@ let displayQuiz = function() {
        // Display answer choices
       let choices = newQuiz.getQuestionIndex().answerChoices;
       for( let i = 0; i < choices.length; i++ ) {
-         let element = document.getElementById( "answer-choice" + i );
+         let element = document.getElementById( "choice" + i );
          element.innerHTML = choices[ i ];
-         userChoice( "button" + i, choices[ i ] );
+         guess( "button" + i, choices[ i ]);
       }
 
-      displayProgress();
+      showProgress();
    }
 };
 
-let userChoice = function( id, answerChoice ) {
+let guess = function( id, guess ) {
    let button = document.getElementById( id );
    button.onclick = function() {
-      newQuiz.userChoice( answerChoice );
+      newQuiz.guess( guess );
       displayQuiz();
    }
 };
 
-let displayProgress = function() {
+let showProgress = function() {
    let currentQuestionNumber = newQuiz.questionIndex + 1;
    let element = document.getElementById( "progress" );
-   console.log ( "function displayProgress element: ");
-   console.log( element );
    element.innerHTML = "Question " + currentQuestionNumber + " of " + newQuiz.questions.length;
 };
 
-let displayScores = function() {
-   let gameOverHTML = "<h1>Your Performance</h1>";
-   gameOverHTML += "<br><h2 id = 'correct-answer'>You answered " + newQuiz.correctAnswer + " out of " +
-                     newQuiz.questions.length + " questions correctly.</h2><br>" +
-                     "<h2 id = 'correct-answer'>Your score is " + timeRemaining + "</h2>";
+let showScores = function() {
+   let gameOverHTML = "<h1>Result</h1>";
+   gameOverHTML += "<h2 id = 'score'>You answered " + newQuiz.score + " correct questions out of "
+                   + newQuiz.questions.length + ".<br><br>Your score is " + timeRemaining + "!</h2>";
    let element = document.getElementById( "quiz" );
    element.innerHTML = gameOverHTML;
 };
@@ -155,35 +129,11 @@ let quizQuestions = [
 // Create new object of TheQuiz constructor
 let newQuiz = new TheQuiz( quizQuestions );
 
-let displayWelcome = function() {
-   // Display welcome message
-   let welcomeMsg = "<h1 id = 'welcome'>Welcome to the<br>Coding Assessment</h1>";
-   welcomeMsg += "<br><h2 id = 'welcomeH2'>Try to answer the following Javascript code-related" +
-                     " questions within the time limit.  Keep in mind that incorrect answers will" +
-                     " penalize your score/time by ten seconds.</h2><br>" + startQuizBtn.outerHTML;
-   let element = document.getElementById( "welcome-msg" );
-   console.log( "About to clear quiz element: " );
-   element.innerHTML = welcomeMsg;
-
-   // Dynamically create the "Start Quiz" button
-   //let startQuizBtn = document.createElement( "button" );
-   /* startQuizBtn.innerHTML = "Start Quiz";
-   startQuizBtn.id = "start-quiz-btn";
-   //let btnElement = document.getElementById( "wrapper" );
-   element.appendChild( startQuizBtn ); */
-
-   // Start the quiz once the user has clicked on the "Start Quiz" button
-   /* startQuizBtn.onclick = function() {
-      displayQuiz();
-   }; */
-   //startQuizBtn.addEventListener( "click", displayQuiz );
-   document.getElementById( "start-quiz-button" ).addEventListener( "click", displayQuiz );
-};
-
-
-
-// Display welcome page
-displayWelcome();
-
-// display quiz
-//displayQuiz();
+// when the page loads, show welcome message,
+document.getElementById( 'start-quiz-btn' ).addEventListener( 'click', function() {
+   document.getElementById( 'quiz' ).setAttribute( 'style', 'display: block;' );
+   document.getElementById( 'welcome-msg' ).setAttribute( 'style', 'display: none;' );
+   displayTime();
+   displayQuiz();
+});
+// when the user click start - do what it already happening now.

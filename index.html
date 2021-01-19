@@ -10,43 +10,38 @@
 
 <body>
    <main>
-      <div class = "grid-wrapper">
+      <div class = "grid">
          <div id = "welcome-msg">
-
+            <h1>Welcome to the JavaScript Code Challenge</h1>
+            <button id = "start-quiz-btn">Start Quiz</button>
          </div>
-         <div id = "quiz" style = "display: none">
-            <h1 id = "header"></h1>
+         <div id = "quiz" style="display: none;">
+            <h1>JavaScript Coding Assessment</h1>
 
-            <div class = "wrapper" id = "wrapper">
+            <div class = "wrapper">
                <div class = "container">
                   <!-- To display quiz progress, Question x of y questions -->
                   <div id = "progress"></div>
 
-                  <!-- To display the current remaining time -->
-                  <div id="time-left"></div>
+                  <div id = "timer"></div>
                </div>
             </div>
 
             <hr style = "margin-bottom: 20px">
-
-            <div>
-               <button id = "start-quiz-button">Start Quiz</button>
-            </div>
-
             <p id = "quiz-question"></p>
 
             <div class = "answer-buttons">
                <button id = "button0">
-                  <span id = "answer-choice0"></span>
+                  <span id = "choice0"></span>
                </button>
                <button id = "button1">
-                  <span id = "answer-choice1"></span>
+                  <span id = "choice1"></span>
                </button>
                <button id = "button2">
-                  <span id = "answer-choice2"></span>
+                  <span id = "choice2"></span>
                </button>
                <button id = "button3">
-                  <span id = "answer-choice3"></span>
+                  <span id = "choice3"></span>
                </button>
             </div>
 
@@ -62,6 +57,6 @@
       </div>
    </main>
 
-   <script src = "./assets/js/script.js" defer></script>
+   <script src = "./assets/js/script.js"></script>
 </body>
 </html>
